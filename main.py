@@ -41,15 +41,15 @@ class Server(BaseHTTPRequestHandler):
         if your_request[1] == 'convert':
             parameters = self.get_url_parameters()
             try:
-                usd = int(parameters["Amount"])
+                usd = int(round(float(parameters["Amount"])))
             except ValueError:
-                return self.wfile.write(json.dumps({'wrong': 'amount', 'received': 'ok'}))
+                return self.wfile.write(json.dumps({'wrong': 'amount', 'received': 'error'}))
             if type(usd) == int:
                 rub_couse = self.check_usd()
                 res = usd*rub_couse
-                self.wfile.write(json.dumps({'RUB': res, 'received': 'ok'}))
+                self.wfile.write(json.dumps({"converted":"USD_TO_RUB", "USD":usd, 'RUB': res, 'received': 'ok'}))
         else:
-            self.wfile.write(json.dumps({'wrong': 'query', 'received': 'ok'}))
+            self.wfile.write(json.dumps({'wrong': 'query', 'received': 'error'}))
 
 
 
