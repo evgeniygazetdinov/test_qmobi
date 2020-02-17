@@ -14,6 +14,15 @@ class Server(BaseHTTPRequestHandler):
         self.end_headers()
 
     def broke_url(self):
+        """
+        broke url by part
+
+        >>> self.broke_url('localhost:8000/convert/?Amount={number}&From=USD&To=RUB')
+        ['localhost:8000', 'convert', '?Amount={number}&From=USD&To=RUB']
+
+        >>> self.broke_url('localhost:8000/convert/?Amount=345&From=USD&To=RUB')
+        ['localhost:8000', 'convert', '?Amount=345&From=USD&To=RUB']
+        """
         url = (self.path).split('/')
         return url
 
@@ -64,6 +73,8 @@ if __name__ == "__main__":
     from sys import argv
 
     if len(argv) == 2:
+        import doctest
+        doctest.testmod()
         run(port=int(argv[1]))
     else:
         run()
