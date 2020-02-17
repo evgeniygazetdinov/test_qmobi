@@ -3,10 +3,9 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import SocketServer
 import json
 import cgi
-import urlparse
-import os
 from urlparse import urlparse
-import commands
+import urllib2
+
 
 class Server(BaseHTTPRequestHandler):
     def _set_headers(self):
@@ -24,22 +23,33 @@ class Server(BaseHTTPRequestHandler):
         return query_components
 
     def check_usd(self):
-        output = 63
-        status, output = commands.getstatusoutput("curl GET https://api.exchangeratesapi.io/latest?base=USD HTTP/1.1")
-        if status == 200:
-            return output['RUB']
-        else:
-            return output
+        html = 63
+        url= ("https://api.exchangeratesapi.io/latest?base=USD")
+        try:
+            response = urllib2.urlopen(url)
+            html = json.load(response)
+        except:
+            pass
+            return html
+        return html['rates']['RUB']
 
-    # GET sends back a Hello world message
+
+
     def do_GET(self):
         self._set_headers()
         your_request = self.broke_url()
-        print(self.check_usd())
-        if your_request[1] == 'convert?':
-            print(self.get_url_parameters())
-            self.wfile.write(json.dumps({'RUB': '64', 'received': 'ok'}))
-        self.wfile.write(json.dumps({'wrong': 'query', 'received': 'ok'}))
+        if your_request[1] == 'convert':
+            parameters = self.get_url_parameters()
+            try:
+                usd = int(parameters["Amount"])
+            except ValueError:
+                return self.wfile.write(json.dumps({'wrong': 'amount', 'received': 'ok'}))
+            if type(usd) == int:
+                rub_couse = self.check_usd()
+                res = usd*rub_couse
+                self.wfile.write(json.dumps({'RUB': res, 'received': 'ok'}))
+        else:
+            self.wfile.write(json.dumps({'wrong': 'query', 'received': 'ok'}))
 
 
 
