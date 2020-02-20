@@ -7,11 +7,7 @@ from urlparse import urlparse
 import urllib2
 import logging
 
-
-
-
 log = logging.getLogger(__name__)
-
 
 
 
@@ -28,13 +24,7 @@ class Server(BaseHTTPRequestHandler):
             self.finish()
 
 
-
-    def _set_headers(self):
-        self.send_response(200)
-        self.send_header('Content-type', 'application/json')
-        self.end_headers()
-
-
+class Server(BaseHTTPRequestHandler):
 
     def broke_url(self):
         """
@@ -51,12 +41,10 @@ class Server(BaseHTTPRequestHandler):
 
 
     def get_url_parameters(self):
-
         query = urlparse(self.path).query
         query_components = dict(qc.split("=") for qc in query.split("&"))
         log.info(query_components)
         return query_components
-
 
 
     def check_usd(self):
@@ -89,10 +77,6 @@ class Server(BaseHTTPRequestHandler):
         else:
             self.wfile.write(json.dumps({'wrong': 'query', 'received': 'error'}))
 
-    def __str__(self):
-        return 1
-
-
 
 
 def run(server_class=HTTPServer, handler_class=Server, port=8000):
@@ -107,6 +91,7 @@ if __name__ == "__main__":
     if len(argv) == 2:
         import doctest
         doctest.testmod()
+
         run(port=int(argv[1]))
     else:
         run()
