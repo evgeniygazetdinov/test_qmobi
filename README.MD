@@ -5,13 +5,20 @@
 
 
 
+
 =================LOCALRUN===================
 
 ./run.sh
 
 =================FOR_DOCKER_RUN=============
 
+in first run:
+
 ./docker_run.sh
+
+after do :
+
+docker-compose up -d
 
 =================USE========================
 
