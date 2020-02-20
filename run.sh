@@ -1,1 +1,2 @@
-python2 main.py 9000
+#!/bin/bash
+python2 main.py 8000

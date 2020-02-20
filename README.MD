@@ -6,10 +6,6 @@
 
 
 
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 =================LOCALRUN===================
 
 ./run.sh
