@@ -1,0 +1,6 @@
+version: '3.4'
+services:
+    usd-convert:
+        image: usd-convert:latest
+        ports:
+         - "127.0.0.1:8000:8000"
